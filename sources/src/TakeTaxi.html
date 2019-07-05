@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html>
     <head>
-       <meta charset="utf-8" />
-       <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-       <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
-       <title>انتخاب تاکسی</title> 
-       <link rel="icon" href="../public/icon/taxi_icon.png">
-       <link rel="stylesheet" href="TakeTaxi.css" />
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="initial-scale=1,maximum-scale=1,user-scalable=no"
+        />
+        <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+        />
+        <title>انتخاب تاکسی</title>
+        <link rel="icon" href="../public/icon/taxi_icon.png" />
+        <link rel="stylesheet" href="TakeTaxi.css" />
     </head>
     <body>
-        <div id='map'></div>
+        <div id="map"></div>
+        <br />
+        <div class="location_select_button_div">
+            <input
+                type="button"
+                value="انتخاب مبدا"
+                disabled="disabled"
+                id="start"
+                class="btn btn-warning location_select_button"
+            />
+            <input
+                type="button"
+                value="انتخاب مقصد"
+                id="destination"
+                class="btn btn-info location_select_button"
+            />
+        </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="TakeTaxi.js"></script>
 </html>

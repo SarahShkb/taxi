@@ -33,3 +33,11 @@ body {
     border-radius: 50%;
     cursor: pointer;
 }
+.location_select_button_div {
+    position: absolute;
+    bottom: 0px;
+    right: 45%;
+}
+.location_select_button {
+    margin-bottom: 10%;
+}
