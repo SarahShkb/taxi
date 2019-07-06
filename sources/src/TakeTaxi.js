@@ -12,7 +12,7 @@ var map = new mapboxgl.Map({
     zoom: 5
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     map.on("click", selectStart);
 });
 
@@ -24,6 +24,9 @@ let geolocate = new mapboxgl.GeolocateControl({
 });
 
 map.addControl(geolocate);
+map.addControl(new MapboxDirections({
+    accessToken: mapboxgl.accessToken
+}), 'top-left');
 
 addRandomTaxi();
 
@@ -61,6 +64,7 @@ function selectStart(e) {
     let start = document.createElement("div");
     start.className = "startMarker";
     startPoint = new mapboxgl.Marker(start).setLngLat(e.lngLat).addTo(map);
+    $("#destination").removeAttr("disabled");
 }
 
 function selectDestination(e) {
@@ -77,13 +81,16 @@ function selectDestination(e) {
         .addTo(map);
 }
 
-$("#destination").on("click", function() {
+
+$("#destination").on("click", function () {
     map.off("click", selectStart);
     map.on("click", selectDestination);
     $("#start").removeAttr("disabled");
+    $("#takeTaxi").show();
+    console.log($('.mapbox-directions-route-summary'));
 });
 
-$("#start").on("click", function() {
+$("#start").on("click", function () {
     map.off("click", selectDestination);
     map.on("click", selectStart);
 });
