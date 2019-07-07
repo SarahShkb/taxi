@@ -6,6 +6,7 @@ mapboxgl.setRTLTextPlugin(
 );
 
 var startLoc, endLoc;
+var data;
 
 var map = new mapboxgl.Map({
     container: "map",
@@ -70,8 +71,9 @@ async function getRoute(startLoc, endLoc) {
     // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 
     let xxx = await callRoute(url);
+    console.log(xxx);
 
-    var data = xxx.routes[0];
+    data = xxx.routes[0];
     var route = data.geometry.coordinates;
     var geojson = {
         type: "Feature",
@@ -112,14 +114,15 @@ async function getRoute(startLoc, endLoc) {
                 "line-opacity": 0.75
             }
         });
+        map.getSource("route").setData(geojson);
     }
     // add turn instructions here at the end
 }
 
 function addRandomTaxi() {
-    for (let i = 0; i < 10; i++) {
-        let randLng = getRandomArbitrary(51.35, 51.379999999999999);
-        let randLat = getRandomArbitrary(35.76, 35.782999999999999);
+    for (let i = 0; i < 30; i++) {
+        let randLng = getRandomArbitrary(51.34, 51.459999999999999);
+        let randLat = getRandomArbitrary(35.73, 35.782999999999999);
         let lngLat = {
             lng: randLng,
             lat: randLat
@@ -156,6 +159,7 @@ function selectDestination(e) {
         return e.lngLat[key];
     });
 
+    console.log(endLoc);
     if (typeof destinationtPoint !== "undefined") {
         destinationtPoint.remove();
     }
@@ -179,6 +183,19 @@ $("#destination").on("click", function() {
 $("#start").on("click", function() {
     map.off("click", selectDestination);
     map.on("click", selectStart);
+});
+
+$("#takeTaxi").on("click", function() {
+    let time = Math.floor(data.duration / 60);
+    let price = Math.floor(data.distance / 500) + Math.floor(time / 5);
+
+    swal({
+        title: "!تاکسی درخواست شد",
+        text: `زمان تقریبی سفر: ${time} دقیقه \n
+                هزینه سفر: ${price} هزار تومان`,
+        closeOnClickOutside: false,
+        type: "success"
+    });
 });
 
 $("#map div .mapboxgl-canvas").css({

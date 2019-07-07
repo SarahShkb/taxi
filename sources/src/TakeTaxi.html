@@ -14,7 +14,11 @@
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
         />
-        <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.0/mapbox-gl-directions.css' type='text/css' />
+        <link
+            rel="stylesheet"
+            href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.0/mapbox-gl-directions.css"
+            type="text/css"
+        />
         <title>انتخاب تاکسی</title>
         <link rel="icon" href="../public/icon/taxi_icon.png" />
         <link rel="stylesheet" href="TakeTaxi.css" />
@@ -23,14 +27,32 @@
         <div id="map"></div>
         <br />
         <div class="location_select_button_div">
-            <input type="button" value="انتخاب مبدا" disabled="disabled" id="start" class="btn btn-warning location_select_button" />
-            <input type="button" value="انتخاب مقصد" disabled="disabled" id="destination" class="btn btn-info location_select_button" />
-            <input type="button" value="!تاکسی" id="takeTaxi" class="btn btn-success location_select_button"/>
+            <input
+                type="button"
+                value="انتخاب مبدا"
+                disabled="disabled"
+                id="start"
+                class="btn btn-warning location_select_button"
+            />
+            <input
+                type="button"
+                value="انتخاب مقصد"
+                disabled="disabled"
+                id="destination"
+                class="btn btn-info location_select_button"
+            />
+            <input
+                type="button"
+                value="!تاکسی"
+                id="takeTaxi"
+                class="btn btn-success location_select_button"
+            />
         </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.0/mapbox-gl-directions.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.0/mapbox-gl-directions.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="TakeTaxi.js"></script>
 </html>
