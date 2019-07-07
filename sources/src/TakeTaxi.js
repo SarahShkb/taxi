@@ -5,6 +5,8 @@ mapboxgl.setRTLTextPlugin(
     "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.0/mapbox-gl-rtl-text.js"
 );
 
+var startLoc, endLoc;
+
 var map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/streets-v10",
@@ -12,7 +14,7 @@ var map = new mapboxgl.Map({
     zoom: 5
 });
 
-$(document).ready(function () {
+$(document).ready(function() {
     map.on("click", selectStart);
 });
 
@@ -24,14 +26,94 @@ let geolocate = new mapboxgl.GeolocateControl({
 });
 
 map.addControl(geolocate);
-map.addControl(new MapboxDirections({
-    accessToken: mapboxgl.accessToken
-}), 'top-left');
 
 addRandomTaxi();
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+async function callRoute(url) {
+    try {
+        let xxx = await $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            withCredentials: true,
+            contentType: "application/json"
+        });
+
+        return xxx;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getRoute(startLoc, endLoc) {
+    // make a directions request using cycling profile
+    // an arbitrary start will always be the same
+    // only the end or destination will change
+    console.log(startLoc);
+    console.log(endLoc);
+    var url =
+        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        startLoc[0] +
+        "," +
+        startLoc[1] +
+        ";" +
+        endLoc[0] +
+        "," +
+        endLoc[1] +
+        "?steps=true&geometries=geojson&access_token=" +
+        "pk.eyJ1Ijoic2FyYWhzaGtiIiwiYSI6ImNqbngwZnFyYzA3NHczcW43b2JzaXVsdnUifQ.CMFPd71aM-oMCSAMAr76oQ";
+
+    // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+
+    let xxx = await callRoute(url);
+
+    var data = xxx.routes[0];
+    var route = data.geometry.coordinates;
+    var geojson = {
+        type: "Feature",
+        properties: {},
+        geometry: {
+            type: "LineString",
+            coordinates: route
+        }
+    };
+    // if the route already exists on the map, reset it using setData
+    if (map.getSource("route")) {
+        console.log("in if");
+        map.getSource("route").setData(geojson);
+    } else {
+        console.log("in else");
+        // otherwise, make a new request
+        map.addLayer({
+            id: "route",
+            type: "line",
+            source: {
+                type: "geojson",
+                data: {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                        type: "LineString",
+                        coordinates: geojson
+                    }
+                }
+            },
+            layout: {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            paint: {
+                "line-color": "#ff0071",
+                "line-width": 5,
+                "line-opacity": 0.75
+            }
+        });
+    }
+    // add turn instructions here at the end
 }
 
 function addRandomTaxi() {
@@ -55,7 +137,9 @@ function addTaxi(lngLat) {
 }
 
 function selectStart(e) {
-    let z = JSON.stringify(e.lngLat);
+    startLoc = Object.keys(e.lngLat).map(function(key) {
+        return e.lngLat[key];
+    });
 
     if (typeof startPoint !== "undefined") {
         startPoint.remove();
@@ -68,7 +152,9 @@ function selectStart(e) {
 }
 
 function selectDestination(e) {
-    let z = JSON.stringify(e.lngLat);
+    endLoc = Object.keys(e.lngLat).map(function(key) {
+        return e.lngLat[key];
+    });
 
     if (typeof destinationtPoint !== "undefined") {
         destinationtPoint.remove();
@@ -79,18 +165,18 @@ function selectDestination(e) {
     destinationtPoint = new mapboxgl.Marker(destination)
         .setLngLat(e.lngLat)
         .addTo(map);
+
+    getRoute(startLoc, endLoc);
 }
 
-
-$("#destination").on("click", function () {
+$("#destination").on("click", function() {
     map.off("click", selectStart);
     map.on("click", selectDestination);
     $("#start").removeAttr("disabled");
     $("#takeTaxi").show();
-    console.log($('.mapbox-directions-route-summary'));
 });
 
-$("#start").on("click", function () {
+$("#start").on("click", function() {
     map.off("click", selectDestination);
     map.on("click", selectStart);
 });
